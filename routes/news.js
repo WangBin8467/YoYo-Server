@@ -39,4 +39,40 @@ router.get('/getNewsList', (req,res,next)=>{
   })
 })
 
+// 新增news数据
+router.post('/addNews',async (req,res)=>{
+  const {name,content,uid,type}=req.body;
+  try{
+    let r1 = Math.floor(Math.random() * 10);
+    let r2 = Math.floor(Math.random() * 10);
+    let _id = `${r1}${(Date.parse(new Date())) / 1000}${r2}`;
+
+    const creatTime=new Date();
+    //插入数据
+    New.insertMany({
+      _id,
+      uid,
+      name,
+      content,
+      type,
+      creatTime
+    })
+    res.json({
+      code:200,
+      msg:'发布成功',
+      result:{
+        news_id:_id
+      }
+    })
+  }catch (e) {
+    res.json({
+      code: 400,
+      msg: e.message,
+      result:''
+    })
+  }
+})
+
+
+
 module.exports = router;
