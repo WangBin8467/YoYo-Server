@@ -3,6 +3,9 @@ var router = express.Router();
 
 var New = require('../models/news');
 
+// 日期格式化
+require('./../utils/dateFormat')
+
 // 查询news列表数据
 router.get('/getNewsList', (req,res,next)=>{
   let sort =req.body.sort||-1; // 默认按创建时间倒序
@@ -41,27 +44,32 @@ router.get('/getNewsList', (req,res,next)=>{
 
 // 新增news数据
 router.post('/addNews',async (req,res)=>{
-  const {name,content,uid,type}=req.body;
+  const {name,content,userID,type,author}=req.body;
   try{
     let r1 = Math.floor(Math.random() * 10);
     let r2 = Math.floor(Math.random() * 10);
     let _id = `${r1}${(Date.parse(new Date())) / 1000}${r2}`;
 
-    const creatTime=new Date();
+    let createTime=new Date().Format('yyyy-MM-dd hh:mm:ss');
+
+    console.clear();
+    console.log(content);
+    console.log(createTime)
     //插入数据
     New.insertMany({
       _id,
-      uid,
-      name,
+      userID,
+      title:name,
       content,
       type,
-      creatTime
+      author,
+      createTime,
     })
     res.json({
       code:200,
       msg:'发布成功',
       result:{
-        news_id:_id
+        news_id:_id,
       }
     })
   }catch (e) {
@@ -69,6 +77,32 @@ router.post('/addNews',async (req,res)=>{
       code: 400,
       msg: e.message,
       result:''
+    })
+  }
+})
+
+// 获取单个news信息
+router.post('/getNewsInfo',async (req,res)=>{
+  const newsID=req.body._id;
+  if (newsID){
+    await New.findById(newsID,(err,doc)=>{
+      console.clear();
+      console.log(err);
+      console.log(doc)
+      if (err){
+        res.json({
+          code:400,
+          msg:err.message,
+          result:'',
+        })
+      } else{
+        res.json({
+          code:200,
+          result:{
+            news:doc
+          }
+        })
+      }
     })
   }
 })

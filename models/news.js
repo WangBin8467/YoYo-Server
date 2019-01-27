@@ -8,6 +8,7 @@ var newsSchema = new Schema({
   "createTime" : String,
   "userID" : Number,
   "author" : String,
+  "type" : Number
 });
 
 module.exports = mongoose.model("New",newsSchema);
