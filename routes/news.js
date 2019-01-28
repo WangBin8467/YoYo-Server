@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var New = require('../models/news');
+var User =require('../models/Users')
 
 // 日期格式化
 require('./../utils/dateFormat')
@@ -86,9 +87,6 @@ router.post('/getNewsInfo',async (req,res)=>{
   const newsID=req.body._id;
   if (newsID){
     await New.findById(newsID,(err,doc)=>{
-      console.clear();
-      console.log(err);
-      console.log(doc)
       if (err){
         res.json({
           code:400,
@@ -96,10 +94,13 @@ router.post('/getNewsInfo',async (req,res)=>{
           result:'',
         })
       } else{
+        let userInfo=User.findOne({_id:doc.userID},(err1,info)=>{
+          return info;
+        })
         res.json({
           code:200,
           result:{
-            news:doc
+            userInfo:userInfo
           }
         })
       }
