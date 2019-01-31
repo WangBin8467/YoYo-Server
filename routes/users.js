@@ -3,6 +3,9 @@ var router = express.Router();
 
 var User = require('../models/Users');
 
+// 日期格式化
+require('./../utils/dateFormat')
+
 // 登录
 router.post('/login',async (req,res,next)=>{
   var param = {
@@ -76,6 +79,7 @@ router.post('/register', async (req, res) => {
         age,
         degree,
         remark,
+        likeList:[]
       })
       res.json({
         code: 200,
@@ -98,6 +102,36 @@ router.post('/register', async (req, res) => {
       code: 400,
       msg: err.message,
       result:''
+    })
+  }
+})
+
+// 用户点赞
+router.post('/addLike',async (req,res)=>{
+  const {userID,newsID}=req.body;
+  if(userID&&newsID){
+    await User.findOne({_id:userID},(err,doc)=>{
+      if (err){
+        res.json({
+          code:400,
+          msg:err.message,
+          result:''
+        })
+      } else{
+        if (doc){
+          doc.likeList=[];
+
+          console.clear();
+          console.log(doc);
+          return
+          doc.likeList.push({
+            "likeID": parseInt(Date.parse(new Date())),
+            userID,
+            newsID,
+            likeTime:new Date().Format('yyyy-MM-dd hh:mm:ss'),
+          })
+        }
+      }
     })
   }
 })

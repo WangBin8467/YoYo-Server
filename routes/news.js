@@ -100,14 +100,12 @@ router.post('/getNewsInfo',async (req,res)=>{
         res.json({
           code:200,
           result:{
-            userInfo:userInfo
+            news:doc
           }
         })
       }
     })
   }
 })
-
-
 
 module.exports = router;
