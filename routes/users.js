@@ -136,4 +136,29 @@ router.post('/addLike',async (req,res)=>{
   }
 })
 
+// 更新用户资料
+router.post('/updateInfo',async (req,res)=>{
+  const user=req.body;
+  const wherestr = {'_id' : user._id};
+  const updatestr = user;
+
+  User.update(wherestr,updatestr,(err,doc)=>{
+    if (err){
+      res.json({
+        code:400,
+        msg:err.message,
+        result:''
+      })
+    } else {
+      if (doc){
+        res.json({
+          code:200,
+          msg:'',
+          result:'ok'
+        })
+      }
+    }
+  })
+})
+
 module.exports = router;

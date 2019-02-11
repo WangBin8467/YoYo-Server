@@ -108,4 +108,27 @@ router.post('/getNewsInfo',async (req,res)=>{
   }
 })
 
+// 获取用户发帖信息
+router.post('/getUserNews',async (req,res)=>{
+  const userID=req.body.userID;
+  if(userID){
+    await New.find({userID:userID},(err,doc)=>{
+      if (err){
+        res.json({
+          code:400,
+          msg:err.message,
+          result:'',
+        })
+      } else{
+        res.json({
+          code:200,
+          result:{
+            news:doc
+          }
+        })
+      }
+    })
+  }
+})
+
 module.exports = router;
