@@ -161,4 +161,35 @@ router.post('/updateInfo',async (req,res)=>{
   })
 })
 
+// 重置用户密码
+router.post('/changeUserPwd',async (req,res)=>{
+  const password=req.body.password;
+  const wherestr = {'_id' : req.body._id};
+
+  User.update(wherestr,password,(err,doc)=>{
+    if (err){
+      res.json({
+        code:400,
+        msg:err.message,
+        result:''
+      })
+    } else {
+      if(doc){
+        console.clear();
+        console.log(doc);
+        res.json({
+          code:200,
+          msg:'',
+          result:'ok'
+        })
+      }else{
+        res.json({
+          code:400,
+          msg:'操作失败',
+        })
+      }
+    }
+  })
+})
+
 module.exports = router;
