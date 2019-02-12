@@ -165,8 +165,9 @@ router.post('/updateInfo',async (req,res)=>{
 router.post('/changeUserPwd',async (req,res)=>{
   const password=req.body.password;
   const wherestr = {'_id' : req.body._id};
+  const updatestr={'password':password};
 
-  User.update(wherestr,password,(err,doc)=>{
+  User.update(wherestr,updatestr,(err,doc)=>{
     if (err){
       res.json({
         code:400,
@@ -175,8 +176,6 @@ router.post('/changeUserPwd',async (req,res)=>{
       })
     } else {
       if(doc){
-        console.clear();
-        console.log(doc);
         res.json({
           code:200,
           msg:'',
