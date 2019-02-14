@@ -141,8 +141,7 @@ router.post('/updateInfo',async (req,res)=>{
   const user=req.body;
   const wherestr = {'_id' : user._id};
   const updatestr = user;
-
-  User.update(wherestr,updatestr,(err,doc)=>{
+  await User.update(wherestr,updatestr,(err,doc)=>{
     if (err){
       res.json({
         code:400,
@@ -167,7 +166,7 @@ router.post('/changeUserPwd',async (req,res)=>{
   const wherestr = {'_id' : req.body._id};
   const updatestr={'password':password};
 
-  User.update(wherestr,updatestr,(err,doc)=>{
+  await User.update(wherestr,updatestr,(err,doc)=>{
     if (err){
       res.json({
         code:400,
@@ -185,6 +184,36 @@ router.post('/changeUserPwd',async (req,res)=>{
         res.json({
           code:400,
           msg:'操作失败',
+        })
+      }
+    }
+  })
+})
+
+// 更新用户头像
+router.post('/changeImage',async (req,res)=>{
+  const updatestr={'imageUrl':req.body.imgStr};
+
+  await User.findByIdAndUpdate(req.body._id,updatestr,(err,doc)=>{
+    if (err){
+      res.json({
+        code:400,
+        msg:err.message,
+        result:''
+      })
+    }else{
+      if (doc.imageUrl){
+        console.clear();
+        console.log(doc);
+        res.json({
+          code:200,
+          msg:'',
+          result:'ok'
+        })
+      } else{
+        res.json({
+          code:400,
+          msg:'更新失败',
         })
       }
     }
