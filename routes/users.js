@@ -203,8 +203,6 @@ router.post('/changeImage',async (req,res)=>{
       })
     }else{
       if (doc.imageUrl){
-        console.clear();
-        console.log(doc);
         res.json({
           code:200,
           msg:'',

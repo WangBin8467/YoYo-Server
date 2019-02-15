@@ -8,7 +8,8 @@ var userSchema = new Schema({
   "sex" : Number,
   "age" : Number,
   "degree" : String,
-  "remark" : String
+  "remark" : String,
+  "imageUrl":String,
 });
 
 module.exports = mongoose.model("User",userSchema);
