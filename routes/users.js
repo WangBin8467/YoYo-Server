@@ -106,36 +106,6 @@ router.post('/register', async (req, res) => {
   }
 })
 
-// 用户点赞
-router.post('/addLike',async (req,res)=>{
-  const {userID,newsID}=req.body;
-  if(userID&&newsID){
-    await User.findOne({_id:userID},(err,doc)=>{
-      if (err){
-        res.json({
-          code:400,
-          msg:err.message,
-          result:''
-        })
-      } else{
-        if (doc){
-          doc.likeList=[];
-
-          console.clear();
-          console.log(doc);
-          return
-          doc.likeList.push({
-            "likeID": parseInt(Date.parse(new Date())),
-            userID,
-            newsID,
-            likeTime:new Date().Format('yyyy-MM-dd hh:mm:ss'),
-          })
-        }
-      }
-    })
-  }
-})
-
 // 更新用户资料
 router.post('/updateInfo',async (req,res)=>{
   const user=req.body;
