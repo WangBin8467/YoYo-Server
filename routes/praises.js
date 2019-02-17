@@ -88,4 +88,70 @@ router.post('/getNewsLike',async (req,res)=>{
   })
 })
 
+// 查找用户点赞过的帖子
+router.post('/getUserLike',async (req,res)=>{
+  const userID=req.body.userID;
+
+  if (userID){
+    // mongoose 3.x  Aggregate $lookup
+    const data=await Praise.aggregate([
+      {
+        $lookup:
+          {
+            from: "news",
+            localField: "newsID",
+            foreignField: "_id",
+            as: "new_docs",
+          }
+      },
+      { $match : { praiseID : userID } }
+    ])
+
+    // ES6 async异步方案下的同步写法 不写回调
+    if (data){
+      res.json({
+        code:200,
+        result:data
+      })
+    } else{
+      res.json({
+        code:400,
+        result:'',
+      })
+    }
+  }
+})
+
+// 查找用户被点赞的信息
+router.post('/getUserBeLike',async (req,res)=>{
+  const userID=req.body.userID;
+
+  if (userID){
+    const data=await Praise.aggregate([
+      {
+        $lookup:
+          {
+            from: "news",
+            localField: "newsID",
+            foreignField: "_id",
+            as: "new_docs",
+          }
+      },
+      { $match : { bePraiseID : userID } }
+    ])
+
+    if (data){
+      res.json({
+        code:200,
+        result:data
+      })
+    } else{
+      res.json({
+        code:400,
+        result:'',
+      })
+    }
+  }
+})
+
 module.exports = router;

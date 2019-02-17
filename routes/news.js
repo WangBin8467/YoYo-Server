@@ -85,6 +85,10 @@ router.post('/addNews',async (req,res)=>{
 // 获取单个news信息
 router.post('/getNewsInfo',async (req,res)=>{
   const newsID=req.body._id;
+
+  console.clear();
+  console.log(newsID);
+
   if (newsID){
     await New.findById(newsID,(err,doc)=>{
       if (err){
@@ -94,14 +98,10 @@ router.post('/getNewsInfo',async (req,res)=>{
           result:'',
         })
       } else{
-        let userInfo=User.findOne({_id:doc.userID},(err1,info)=>{
-          return info;
-        })
+        console.log(doc);
         res.json({
           code:200,
-          result:{
-            news:doc
-          }
+          result:doc
         })
       }
     })
