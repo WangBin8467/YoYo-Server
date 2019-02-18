@@ -34,8 +34,6 @@ router.post('/addLike', (req,res)=>{
         result:''
       })
     } else {
-      console.clear();
-      console.log(doc);
       if(doc){
         res.json({
           code:200,
@@ -102,7 +100,7 @@ router.post('/getUserLike',async (req,res)=>{
             localField: "newsID",
             foreignField: "_id",
             as: "new_docs",
-          }
+          },
       },
       { $match : { praiseID : userID } }
     ])
@@ -135,7 +133,7 @@ router.post('/getUserBeLike',async (req,res)=>{
             localField: "newsID",
             foreignField: "_id",
             as: "new_docs",
-          }
+          },
       },
       { $match : { bePraiseID : userID } }
     ])
