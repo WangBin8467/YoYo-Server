@@ -73,4 +73,44 @@ router.post('/getCommentAll',async (req,res)=>{
   })
 })
 
+// 新增评论下 子评论
+router.post('/addReply',async (req,res)=>{
+  const data=req.body;
+
+  let r1 = Math.floor(Math.random() * 10);
+  let r2 = Math.floor(Math.random() * 10);
+  let reply_id = `${r1}${(Date.parse(new Date())) / 1000}${r2}`;
+  let reply_createTime=new Date().Format('yyyy-MM-dd hh:mm:ss');
+
+  let replyItem={
+    reply_id,
+    reply_uid:data,
+    reply_name:data,
+    reply_to_uid:data,
+    reply_to_name:data,
+    reply_content:data,
+    reply_createTime,
+  }
+
+  const replyArr=data.replyList.push(replyItem);
+
+  var wherestr = {'_id' : data.commentID};
+  var updatestr = {'replyList': replyArr};
+
+  Praise.update(wherestr,updatestr,(err,doc)=>{
+    if (err){
+      res.json({
+        code:400,
+        msg:err.message,
+        result:''
+      })
+    } else {
+      console.clear();
+      console.log(doc);
+    }
+  })
+
+
+})
+
 module.exports = router;
