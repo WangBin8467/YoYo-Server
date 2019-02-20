@@ -82,22 +82,23 @@ router.post('/addReply',async (req,res)=>{
   let reply_id = `${r1}${(Date.parse(new Date())) / 1000}${r2}`;
   let reply_createTime=new Date().Format('yyyy-MM-dd hh:mm:ss');
 
-  let replyItem={
+  const replyItem= {
     reply_id,
-    reply_uid:data,
-    reply_name:data,
-    reply_to_uid:data,
-    reply_to_name:data,
-    reply_content:data,
+    reply_uid: data.userID,
+    reply_name: data.userName,
+    reply_to_uid: data.reply_to_uid,
+    reply_to_name: data.reply_to_name,
+    reply_content: data.reply_content,
     reply_createTime,
   }
 
-  const replyArr=data.replyList.push(replyItem);
+  const replyArr=data.replyList;
+  replyArr.push(replyItem);
 
-  var wherestr = {'_id' : data.commentID};
+  var wherestr = {'_id' : data.cid};
   var updatestr = {'replyList': replyArr};
 
-  Praise.update(wherestr,updatestr,(err,doc)=>{
+  await Comment.update(wherestr,updatestr,(err,doc)=>{
     if (err){
       res.json({
         code:400,
@@ -105,8 +106,18 @@ router.post('/addReply',async (req,res)=>{
         result:''
       })
     } else {
-      console.clear();
-      console.log(doc);
+      if (doc.ok===1){
+        res.json({
+          code:200,
+          msg:'',
+          result:replyItem
+        })
+      } else{
+        res.json({
+          code:400,
+          msg:'评论失败',
+        })
+      }
     }
   })
 
