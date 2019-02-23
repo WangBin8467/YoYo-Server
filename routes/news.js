@@ -131,4 +131,23 @@ router.post('/getUserNews',async (req,res)=>{
   }
 })
 
+// 查找帖子
+router.post('/search',async (req,res)=>{
+  const title=req.body;
+  const whereStr={'title':{$regex:`/${title}/i`}}
+
+  await New.find(whereStr,(err,doc)=>{
+    if (err){
+      res.json({
+        code:400,
+        msg:err.message,
+        result:'',
+      })
+    } else{
+      console.clear();
+      console.log(doc);
+    }
+  })
+})
+
 module.exports = router;
