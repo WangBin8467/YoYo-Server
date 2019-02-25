@@ -133,8 +133,12 @@ router.post('/getUserNews',async (req,res)=>{
 
 // 查找帖子
 router.post('/search',async (req,res)=>{
-  const title=req.body;
-  const whereStr={'title':{$regex:`/${title}/i`}}
+  const title=req.body.value;
+  const whereStr={'title':`/${title}/i`}
+
+  console.clear();
+  console.log(whereStr)
+
 
   await New.find(whereStr,(err,doc)=>{
     if (err){
@@ -144,7 +148,6 @@ router.post('/search',async (req,res)=>{
         result:'',
       })
     } else{
-      console.clear();
       console.log(doc);
     }
   })

@@ -14,13 +14,13 @@ var commentsRouter =require('./routes/comments');
 var app = express();
 
 //连接MongoDB数据库
-mongoose.connect('mongodb://127.0.0.1:27017/YoYo', { useNewUrlParser: true });
+mongoose.connect('mongodb://admin:2T3QMhB3LyjLfocPEk@47.98.137.255:27017/YoYo?authSource=admin', { useNewUrlParser: true });
 
 mongoose.connection.on("connected", function () {
   console.log("MongoDB connected success.")
 });
 
-mongoose.connection.on("error", function () {
+mongoose.connection.on("error", function (error) {
   console.log("MongoDB connected fail.")
 });
 
