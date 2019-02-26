@@ -8,7 +8,8 @@ var newsSchema = new Schema({
   "createTime" : String,
   "userID" : Number,
   "author" : String,
-  "type" : Number
+  "type" : Number,
+  "imageUrl": String,
 });
 
 module.exports = mongoose.model("New",newsSchema);

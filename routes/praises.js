@@ -10,7 +10,7 @@ require('./../utils/dateFormat')
 
 // 用户点赞
 router.post('/addLike', (req,res)=>{
-  const {praiseID, bePraiseID,newsID} = req.body;
+  const {praiseID, bePraiseID,praiseUsername,newsID,praiseImage,bePraiseImage} = req.body;
 
   let r1 = Math.floor(Math.random() * 10);
   let r2 = Math.floor(Math.random() * 10);
@@ -21,8 +21,12 @@ router.post('/addLike', (req,res)=>{
     _id,
     praiseID,
     bePraiseID,
+    praiseUsername,
     newsID,
     createTime,
+    praiseImage,
+    bePraiseImage,
+    isRead:false
   })
 
   // 插入数据
@@ -150,6 +154,30 @@ router.post('/getUserBeLike',async (req,res)=>{
       })
     }
   }
+})
+
+// 用户阅读
+router.post('/read',async (req,res)=>{
+  const whereStr={'_id':req.body.praiseID};
+  const updateStr={'isRead':true}
+
+  await Praise.update(whereStr,updateStr,(err,doc)=>{
+    if (err){
+      res.json({
+        code:400,
+        msg:err.message,
+        result:'',
+      })
+    } else{
+      if (doc.ok===1){
+        res.json({
+          code:200,
+          result:'ok',
+        })
+      }
+    }
+  })
+
 })
 
 module.exports = router;

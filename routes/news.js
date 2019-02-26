@@ -45,7 +45,7 @@ router.get('/getNewsList', (req,res,next)=>{
 
 // 新增news数据
 router.post('/addNews',async (req,res)=>{
-  const {name,content,userID,type,author}=req.body;
+  const {name,content,userID,type,author,imageUrl}=req.body;
   try{
     let r1 = Math.floor(Math.random() * 10);
     let r2 = Math.floor(Math.random() * 10);
@@ -53,9 +53,6 @@ router.post('/addNews',async (req,res)=>{
 
     let createTime=new Date().Format('yyyy-MM-dd hh:mm:ss');
 
-    console.clear();
-    console.log(content);
-    console.log(createTime)
     //插入数据
     New.insertMany({
       _id,
@@ -65,6 +62,7 @@ router.post('/addNews',async (req,res)=>{
       type,
       author,
       createTime,
+      imageUrl
     })
     res.json({
       code:200,
@@ -85,9 +83,6 @@ router.post('/addNews',async (req,res)=>{
 // 获取单个news信息
 router.post('/getNewsInfo',async (req,res)=>{
   const newsID=req.body._id;
-
-  console.clear();
-  console.log(newsID);
 
   if (newsID){
     await New.findById(newsID,(err,doc)=>{
