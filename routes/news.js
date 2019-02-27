@@ -93,7 +93,6 @@ router.post('/getNewsInfo',async (req,res)=>{
           result:'',
         })
       } else{
-        console.log(doc);
         res.json({
           code:200,
           result:doc
@@ -128,14 +127,14 @@ router.post('/getUserNews',async (req,res)=>{
 
 // 查找帖子
 router.post('/search',async (req,res)=>{
-  const title=req.body.value;
-  const whereStr={'title':`/${title}/i`}
+  const value=req.body.value;
+  // 正则转换 模糊查询
+  const regValue =new RegExp(value ,"i");
+  const query =  {
+    "title" : regValue
+  };
 
-  console.clear();
-  console.log(whereStr)
-
-
-  await New.find(whereStr,(err,doc)=>{
+  await New.find(query,(err,doc)=>{
     if (err){
       res.json({
         code:400,
@@ -143,7 +142,13 @@ router.post('/search',async (req,res)=>{
         result:'',
       })
     } else{
-      console.log(doc);
+      res.json({
+        code:200,
+        result:{
+          count:doc.length,
+          data:doc
+        }
+      })
     }
   })
 })
