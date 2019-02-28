@@ -13,15 +13,21 @@ router.get('/getNewsList', (req,res,next)=>{
   let page = req.body.page||1; //默认第一页
   let pageSize = req.body.pageSize || 10; // 默认一页10条
   let skip=(page-1)*pageSize; // 跳过多少条
-  let params={}; // 筛选条件
-  if(req.body.type){
+  let params={}; // 默认分类不限
+  let totalCount=0; //总条数
+  if(req.body.type>0){
     params={
       'type': req.body.type,
     }
   }
 
+   New.find(params,async (err,doc)=>{
+    totalCount=doc.length
+  })
+
   let newsModel= New.find(params).skip(skip).limit(pageSize);
-  // 1 升序 -1 降序
+
+  //1 升序 -1 降序
   sort && newsModel.sort({'createTime':sort})
   newsModel.exec((err,doc)=>{
     if(err){
@@ -35,7 +41,7 @@ router.get('/getNewsList', (req,res,next)=>{
         code:200,
         msg:'successful',
         result:{
-          count:doc.length,
+          count:totalCount,
           data:doc
         }
       })
