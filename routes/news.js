@@ -8,21 +8,21 @@ var User =require('../models/Users')
 require('./../utils/dateFormat')
 
 // 查询news列表数据
-router.get('/getNewsList', (req,res,next)=>{
+router.post('/getNewsList', async (req,res,next)=>{
   let sort =req.body.sort||-1; // 默认按创建时间倒序
   let page = req.body.page||1; //默认第一页
   let pageSize = req.body.pageSize || 10; // 默认一页10条
   let skip=(page-1)*pageSize; // 跳过多少条
   let params={}; // 默认分类不限
-  let totalCount=0; //总条数
+  let totalCount=0; // 总条数
   if(req.body.type>0){
     params={
       'type': req.body.type,
     }
   }
 
-   New.find(params,async (err,doc)=>{
-    totalCount=doc.length
+   await New.find(params,async (err,doc)=>{
+     totalCount=doc.length;
   })
 
   let newsModel= New.find(params).skip(skip).limit(pageSize);
@@ -37,6 +37,7 @@ router.get('/getNewsList', (req,res,next)=>{
         result:''
       })
     }else{
+      console.log(totalCount);
       res.json({
         code:200,
         msg:'successful',
