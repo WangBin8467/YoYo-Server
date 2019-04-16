@@ -188,4 +188,54 @@ router.post('/changeImage',async (req,res)=>{
   })
 })
 
+// 删除用户
+router.post('/deleteUser',async (req,res)=>{
+  const wherestr={'_id':req.body.userID};
+  await User.remove(wherestr,(err,doc)=>{
+    if (err){
+      res.json({
+        code:400,
+        msg:err.message,
+        result:'',
+      })
+    } else{
+      if (doc) {
+        res.json({
+          code:200,
+          result:'ok'
+        })
+      }
+      else{
+        res.json({
+          code:400,
+          msg:err.message,
+          result:'',
+        })
+      }
+    }
+  })
+})
+
+// 获取用户信息
+router.post('/getUserInfo',async (req,res)=>{
+  const userID=req.body.userID;
+
+  if (userID){
+    await User.findById(userID,(err,doc)=>{
+      if (err){
+        res.json({
+          code:400,
+          msg:err.message,
+          result:'',
+        })
+      } else{
+        res.json({
+          code:200,
+          result:doc
+        })
+      }
+    })
+  }
+})
+
 module.exports = router;

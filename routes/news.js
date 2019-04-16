@@ -160,4 +160,32 @@ router.post('/search',async (req,res)=>{
   })
 })
 
+// 删除帖子
+router.post('/deleteNews',async (req,res)=>{
+  const wherestr={'_id':req.body.newsID};
+  await New.remove(wherestr,(err,doc)=>{
+      if (err){
+        res.json({
+          code:400,
+          msg:err.message,
+          result:'',
+        })
+      } else{
+        if (doc) {
+          res.json({
+            code:200,
+            result:'ok'
+          })
+        }
+       else{
+          res.json({
+            code:400,
+            msg:err.message,
+            result:'',
+          })
+        }
+      }
+  })
+})
+
 module.exports = router;
